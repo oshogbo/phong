@@ -112,15 +112,15 @@ init_circle(void)
 int
 main(void)
 {
-	
+
 	init_circle();
 	init_window(600, 480, "gk", false);
 	while (1) {
 		SDL_Event ev;
-	
+
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glLoadIdentity();
-		
+
 		draw_scene();
 
 		memset(&ev, 0, sizeof(ev));
