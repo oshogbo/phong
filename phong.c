@@ -445,7 +445,7 @@ main(void)
 		if (pkeys[SDLK_i]) {
 			printf("light: (%g %g %g); move speed = %g "
 			    "seetings speed = %g\n"
-			    "Kspec = %g, Kamp = %g, Kdiff = %g, alpha = %g",
+			    "Kspec = %g, Kamp = %g, Kdiff = %g, alpha = %g\n",
 			    light.x, light.y, light.z, SPEED,
 			    SETTINGS_SPEED * SPEED,
 			    Kspec, Kamp, Kdiff, alpha);
