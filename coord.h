@@ -34,11 +34,15 @@ typedef struct {
 	float z;
 } coord_t;
 
-void	normalize(const coord_t *in, coord_t *out);
-void	sub(const coord_t *ain, const coord_t *bin, coord_t *out);
-void	neg(const coord_t *in, coord_t *out);
-float	dot(const coord_t *ain, const coord_t *bin);
-float	clamp(float a, float min, float max);
-void	mul_by_const(const coord_t *v, float a, coord_t *out);
-void	reflect(const coord_t *v, const coord_t *n, coord_t *out);
+coord_t	*normalize(const coord_t *in, coord_t *out);
+coord_t	*sub(const coord_t *ain, const coord_t *bin, coord_t *out);
+coord_t	*add(const coord_t *ain, const coord_t *bin, coord_t *out);
+coord_t	*neg(const coord_t *in, coord_t *out);
+float	 dot(const coord_t *ain, const coord_t *bin);
+float	 clamp(float a, float min, float max);
+coord_t	*mul_by_const(const coord_t *v, float a, coord_t *out);
+coord_t	*add_const(const coord_t *v, float a, coord_t *out);
+coord_t	*reflect(const coord_t *v, const coord_t *n, coord_t *out);
+coord_t	*clamp_v(const coord_t *in, float min, float max, coord_t *out);
+
 #endif

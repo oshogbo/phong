@@ -28,42 +28,62 @@
 
 #include "coord.h"
 
-void
+coord_t*
 normalize(const coord_t *in, coord_t *out)
 {
 	float s;
 
 	if (in == NULL || out == NULL)
-		return;
+		return (NULL);
 
 	s = sqrt(in->x * in->x + in->y * in->y + in->z * in->z);
 	out->x = in->x / s;
 	out->y = in->y / s;
 	out->z = in->z / s;
+
+	return (out);
 }
 
-void
+coord_t*
 sub(const coord_t *ain, const coord_t *bin, coord_t *out)
 {
 
 	if(ain == NULL || bin == NULL || out == NULL)
-		return;
+		return (NULL);
 
 	out->x = ain->x - bin->x;
 	out->y = ain->y - bin->y;
 	out->z = ain->z - bin->z;
+
+	return (out);
 }
 
-void
+coord_t*
+add(const coord_t *ain, const coord_t *bin, coord_t *out)
+{
+
+	if(ain == NULL || bin == NULL || out == NULL)
+		return (NULL);
+
+	out->x = ain->x + bin->x;
+	out->y = ain->y + bin->y;
+	out->z = ain->z + bin->z;
+
+	return (out);
+}
+
+coord_t*
 neg(const coord_t *in, coord_t *out)
 {
 
 	if (in == NULL || out == NULL)
-		return;
+		return (NULL);
 
 	out->x = -in->x;
 	out->y = -in->y;
 	out->z = -in->z;
+
+	return (out);
 }
 
 float
@@ -71,7 +91,7 @@ dot(const coord_t *ain, const coord_t *bin)
 {
 
 	if (ain == NULL || bin == NULL)
-		return 0.0;
+		return (0.0);
 
 	return (ain->x * bin->x + ain->y * bin->y + ain->z * bin->z);
 }
@@ -84,11 +104,25 @@ clamp(float a, float min, float max)
 		a = max;
 	else if (a < min)
 		a = min;
-		
-	return a;
+
+	return (a);
 }
 
-/*static void 
+coord_t*
+clamp_v(const coord_t *in, float min, float max, coord_t *out)
+{
+
+	if (in == NULL || out == NULL)
+		return (NULL);
+
+	out->x = clamp(in->x, min, max);
+	out->y = clamp(in->y, min, max);
+	out->z = clamp(in->z, min, max);
+
+	return (out);
+}
+
+/*static void
 mul(const coord_t *va, const coord_t *vb, coord_t *out)
 {
 	float i, j, k;
@@ -102,28 +136,46 @@ mul(const coord_t *va, const coord_t *vb, coord_t *out)
 	out->z = k;
 }*/
 
-void
+coord_t*
 mul_by_const(const coord_t *v, float a, coord_t *out)
 {
 
 	if (v == NULL || out == NULL)
-		return;
-	
+		return (NULL);
+
 	out->x = v->x * a;
 	out->y = v->y * a;
 	out->z = v->z * a;
+
+	return (out);
 }
 
-void
+coord_t*
+add_const(const coord_t *v, float a, coord_t *out)
+{
+
+	if (v == NULL || out == NULL)
+		return (NULL);
+
+	out->x = v->x + a;
+	out->y = v->y + a;
+	out->z = v->z + a;
+
+	return (out);
+}
+
+coord_t*
 reflect(const coord_t *v, const coord_t *n, coord_t *out)
 {
 	float d;
 
 	if (v == NULL || n == NULL || out == NULL)
-		return;
+		return (NULL);
 
 	d = dot(v, n) * 2.0f;
 	mul_by_const(n, d, out);
 	sub(v, out, out);
+
+	return (out);
 }
 
