@@ -34,4 +34,5 @@ typedef struct {
 	float z;
 } coord_t;
 
+void	normalize(coord_t *in, coord_t *out);
 #endif

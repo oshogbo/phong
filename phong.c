@@ -37,7 +37,8 @@
 #define ANGLE_STEP	0.5
 #define R		100
 /* 1 / ANGLE_STEP == 2 MUST BY INTEGER */
-#define CIRCLE_SIZE	(360 * 2 * R)
+#define CIRCLE_SIZE	(360 * 2 * 180 * 2)
+#define Ia		0.5
 
 bool	pkeys[512];
 coord_t	coords[CIRCLE_SIZE];
@@ -94,15 +95,18 @@ draw_scene(void)
 static void
 init_circle(void)
 {
-	float r, a, x, y;
+	float r, a, b, rsb, rcb;
 	unsigned int i;
 
 	i = 0;
-	for (r = 0; r < R; r++) {
+	r = R;
+	for (b = 0; b < 180; b += ANGLE_STEP) {
+		rsb = r * sinf(b * 180 / M_PI);
+		rcb = r * cosf(b * 180 / M_PI);
 		for (a = 0; a < 360; a += ANGLE_STEP) {
-			coords[i].x = x = r * sinf(a * 180 / M_PI);
-			coords[i].y = y = r * cosf(a * 180 / M_PI);
-			coords[i].z = sqrt(r * r - x * x - y * y);
+			coords[i].x = rsb * cosf(a * 180 / M_PI);
+			coords[i].y = rsb * sinf(a * 180 / M_PI);
+			coords[i].z = rcb; 
 			i++;
 		}
 	}
