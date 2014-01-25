@@ -51,7 +51,7 @@ void	(*addfunc)(coord_t*);
 void	(*subfunc)(coord_t*);
 void	(*infofunc)(void);
 float	SPEED = 10;
-float	Kspec = 2.0, Kamp = 0.25, Kdiff = 1.0, alpha = 200.0;
+float	Kspec = 0.3, Kamp = 0.25, Kdiff = 0.3, alpha = 200.0;
 
 static void
 init_window(int width, int height, const char *name, bool fs)
@@ -163,7 +163,7 @@ static void
 info_kamp(void)
 {
 
-	printf("Changing: kampi.\n");
+	printf("Changing: kamp.\n");
 }
 
 static void
@@ -186,7 +186,7 @@ static void
 info_kdiff(void)
 {
 
-	printf("Changing kamp.\n");
+	printf("Changing kdiff.\n");
 }
 
 static void
@@ -335,7 +335,7 @@ phong(coord_t *c)
 	neg(&R, &R);
 	normalize(&R, &R);
 
-	mul_by_const(&diffusecolor, fmax(dot(&N, &L), 0.0), &Idiff);
+	mul_by_const(&diffusecolor, fmax(dot(&N, neg(&L, &L)), 0.0), &Idiff);
 	mul_by_const(&specularcolor, pow(fmax(dot(&R, &E), 0.0), alpha), &Ispec);
 	if (clampon == true) {
 		clamp_v(&Idiff, 0.0, 1.0, &Idiff);
@@ -392,9 +392,9 @@ init_circle(void)
 	scenecolor.y = 0.0;
 	scenecolor.z = 0.0;
 
-	diffusecolor.x = 0.01;
-	diffusecolor.y = 0.01;
-	diffusecolor.z = 0.01;
+	diffusecolor.x = 0.1;
+	diffusecolor.y = 0.1;
+	diffusecolor.z = 0.1;
 
 	specularcolor.x = 0.2;
 	specularcolor.y = 0.2;
@@ -434,7 +434,7 @@ help(void)
 	printf("2 - set changing green color\n");
 	printf("3 - set changing blue color\n");
 	printf("4 - set changing all color\n");
-	printf("h - Kspec\n");
+	printf("o - Kspec\n");
 	printf("j - Kamp\n");
 	printf("k - Kdiff\n");
 	printf("l - alpha\n");
@@ -525,7 +525,7 @@ main(void)
 			subfunc = sub_speed;
 			infofunc = info_speed;
 		}
-		if (pkeys[SDLK_h]) {
+		if (pkeys[SDLK_o]) {
 			addfunc = add_kspec;
 			subfunc = sub_kspec;
 			infofunc = info_kspec;
