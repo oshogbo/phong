@@ -51,7 +51,7 @@ void	(*addfunc)(coord_t*);
 void	(*subfunc)(coord_t*);
 void	(*infofunc)(void);
 float	SPEED = 10;
-float	Kspec = 1.0, Kamp = 0.25, Kdiff = 1.0, alpha = 200.0;
+float	Kspec = 2.0, Kamp = 0.25, Kdiff = 1.0, alpha = 200.0;
 
 static void
 init_window(int width, int height, const char *name, bool fs)
@@ -296,7 +296,7 @@ phong(coord_t *c)
 	mul_by_const(&specularcolor, pow(fmax(dot(&R, &E), 0.0), alpha), &Ispec);
 	if (clampon == true) {
 		clamp_v(&Idiff, 0.0, 1.0, &Idiff);
-		clamp_v(&Ispec, 0.0, 1.0, &Idiff);
+		clamp_v(&Ispec, 0.0, 1.0, &Ispec);
 	}
 
 	mul_by_const(&Ispec, Kspec, &Ispec);
