@@ -42,7 +42,7 @@
 #define Ia		0.0
 
 bool	pkeys[512];
-bool	clampon;
+bool	clampon, scale;
 coord_t	coords[CIRCLE_SIZE];
 coord_t scenecolor, ambientcolor, specularcolor, diffusecolor;
 coord_t light;
@@ -317,6 +317,7 @@ phong(coord_t *c)
 {
 	coord_t Idiff, Ispec, Iamb;
 	coord_t L, E, R, N, result;
+	float s;
 
 	memcpy(&Iamb, &ambientcolor, sizeof(coord_t));
 
@@ -350,7 +351,12 @@ phong(coord_t *c)
 	add(&result, &Ispec, &result);
 	add(&result, &scenecolor, &result);
 
-	glColor3f(result.x, result.y, result.z);
+	if (scale)
+		s = (Kspec + Kamp + Kdiff + 1.0);
+	else
+		s = 1.0;
+
+	glColor3f(result.x / s, result.y / s, result.z / s);
 }
 
 static void
@@ -388,6 +394,7 @@ init_circle(void)
 	light.y = -10.0;
 	light.z = 30.0;
 	clampon = true;
+	scale 	= false;
 	scenecolor.x = 0.0;
 	scenecolor.y = 0.0;
 	scenecolor.z = 0.0;
@@ -434,6 +441,8 @@ help(void)
 	printf("2 - set changing green color\n");
 	printf("3 - set changing blue color\n");
 	printf("4 - set changing all color\n");
+	printf("5 - scale mode on\n");
+	printf("6 - scale mode off\n");
 	printf("o - Kspec\n");
 	printf("j - Kamp\n");
 	printf("k - Kdiff\n");
@@ -488,9 +497,10 @@ main(void)
 		if (pkeys[SDLK_i]) {
 			printf("light: (%g %g %g); move speed = %g "
 			    "seetings speed = %g\n"
+			    "scale = %i\n"
 			    "Kspec = %g, Kamp = %g, Kdiff = %g, alpha = %g\n",
 			    light.x, light.y, light.z, SPEED,
-			    SETTINGS_SPEED * SPEED,
+			    SETTINGS_SPEED * SPEED, scale,
 			    Kspec, Kamp, Kdiff, alpha);
 			printf("Changing color: ");
 			if (vcolor == &rcolor)
@@ -550,6 +560,10 @@ main(void)
 			subfunc = sub_diffiusecolor;
 			infofunc = info_diffusecolor;
 		}
+		if (pkeys[SDLK_5])
+			scale = true;
+		if (pkeys[SDLK_6])
+			scale = false;
 		if (pkeys[SDLK_c])
 			clampon = false;
 		else
