@@ -323,13 +323,13 @@ help(void)
 	printf("p - speed\n");
 	printf("- - sb color\n");
 	/* XXX: WTF plus dont work for me ??? */
-	printf("0 - add color\n"); 
-	printf("c - turn off clamp\n"); 
-	printf("h - show this color\n"); 
-	printf("1 - set changing red color\n"); 
-	printf("2 - set changing green color\n"); 
-	printf("3 - set changing blue color\n"); 
-	printf("4 - set changing all color\n"); 
+	printf("0 - add color\n");
+	printf("c - turn off clamp\n");
+	printf("h - show this color\n");
+	printf("1 - set changing red color\n");
+	printf("2 - set changing green color\n");
+	printf("3 - set changing blue color\n");
+	printf("4 - set changing all color\n");
 }
 
 int
