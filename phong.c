@@ -36,8 +36,8 @@
 #define PIXEL_HEIGHT	PIXEL_WIDTH
 #define ANGLE_STEP	0.5
 #define RADIUS		100
-#define SEETINGS_SPEED 	0.0001
-/* 1 / ANGLE_STEP == 2 MUST BY INTEGER */
+#define SETTINGS_SPEED	0.01
+/* 1 / ANGLE_STEP == 2 */
 #define CIRCLE_SIZE	(360 * 2 * 180 * 2)
 #define Ia		0.0
 
@@ -51,7 +51,7 @@ void	(*addfunc)(coord_t*);
 void	(*subfunc)(coord_t*);
 void	(*infofunc)(void);
 float	SPEED = 10;
-float	Kspec = 1.0, Kamp = 1.0, Kdiff = 1.0, alpha = 100.0;
+float	Kspec = 6.0, Kamp = 0.25, Kdiff = 0.25, alpha = 200.0;
 
 static void
 init_window(int width, int height, const char *name, bool fs)
@@ -117,56 +117,56 @@ static void
 sub_kspec(coord_t __attribute__ ((unused)) *c)
 {
 
-	Kspec -= 0.0001 * SPEED;
+	Kspec -= SETTINGS_SPEED * SPEED;
 }
 
 static void
 add_kspec(coord_t __attribute__ ((unused)) *c)
 {
 
-	Kspec += 0.0001 * SPEED;
+	Kspec += SETTINGS_SPEED * SPEED;
 }
 
 static void
 sub_kamp(coord_t __attribute__ ((unused)) *c)
 {
 
-	Kamp -= 0.0001 * SPEED;
+	Kamp -= SETTINGS_SPEED * SPEED;
 }
 
 static void
 add_kamp(coord_t __attribute__ ((unused)) *c)
 {
 
-	Kamp += 0.0001 * SPEED;
+	Kamp += SETTINGS_SPEED * SPEED;
 }
 
 static void
 sub_kdiff(coord_t __attribute__ ((unused)) *c)
 {
 
-	Kdiff -= 0.0001 * SPEED;
+	Kdiff -= SETTINGS_SPEED * SPEED;
 }
 
 static void
 add_kdiff(coord_t __attribute__ ((unused)) *c)
 {
 
-	Kdiff += 0.0001 * SPEED;
+	Kdiff += SETTINGS_SPEED * SPEED;
 }
 
 static void
 add_alpha(coord_t __attribute__ ((unused)) *c)
 {
 
-	alpha += 0.0001 * SPEED;
+	alpha += SETTINGS_SPEED * SPEED;
 }
 
 static void
 sub_alpha(coord_t __attribute__ ((unused)) *c)
 {
 
-	alpha -= 0.0001 * SPEED;
+	alpha -= SETTINGS_SPEED * SPEED;
 }
 
 static void
@@ -174,7 +174,7 @@ sub_scenecolor(coord_t *c)
 {
 	coord_t cspeed;
 
-	mul_by_const(c, -0.0001 * SPEED, &cspeed);
+	mul_by_const(c, -SETTINGS_SPEED * SPEED, &cspeed);
 	add(&scenecolor, &cspeed, &scenecolor);
 }
 
@@ -183,7 +183,7 @@ add_scenecolor(coord_t *c)
 {
 	coord_t cspeed;
 
-	mul_by_const(c, 0.0001 * SPEED, &cspeed);
+	mul_by_const(c, SETTINGS_SPEED * SPEED, &cspeed);
 	add(&scenecolor, &cspeed, &scenecolor);
 }
 
@@ -199,7 +199,7 @@ sub_ambientcolor(coord_t *c)
 {
 	coord_t cspeed;
 
-	mul_by_const(c, -0.0001 * SPEED, &cspeed);
+	mul_by_const(c, -SETTINGS_SPEED * SPEED, &cspeed);
 	add(&ambientcolor, &cspeed, &ambientcolor);
 }
 
@@ -208,7 +208,7 @@ add_ambientcolor(coord_t *c)
 {
 	coord_t cspeed;
 
-	mul_by_const(c, 0.0001 * SPEED, &cspeed);
+	mul_by_const(c, SETTINGS_SPEED * SPEED, &cspeed);
 	add(&ambientcolor, &cspeed, &ambientcolor);
 }
 
@@ -224,7 +224,7 @@ sub_specularcolor(coord_t *c)
 {
 	coord_t cspeed;
 
-	mul_by_const(c, -0.0001 * SPEED, &cspeed);
+	mul_by_const(c, -SETTINGS_SPEED * SPEED, &cspeed);
 	add(&specularcolor, &cspeed, &specularcolor);
 }
 
@@ -233,7 +233,7 @@ add_specularcolor(coord_t *c)
 {
 	coord_t cspeed;
 
-	mul_by_const(c, 0.0001 * SPEED, &cspeed);
+	mul_by_const(c, SETTINGS_SPEED * SPEED, &cspeed);
 	add(&specularcolor, &cspeed, &specularcolor);
 }
 
@@ -249,7 +249,7 @@ sub_diffiusecolor(coord_t *c)
 {
 	coord_t cspeed;
 
-	mul_by_const(c, -0.0001 * SPEED, &cspeed);
+	mul_by_const(c, -SETTINGS_SPEED * SPEED, &cspeed);
 	add(&diffusecolor, &cspeed, &diffusecolor);
 }
 
@@ -258,7 +258,7 @@ add_diffiusecolor(coord_t *c)
 {
 	coord_t cspeed;
 
-	mul_by_const(c, 0.0001 * SPEED, &cspeed);
+	mul_by_const(c, SETTINGS_SPEED * SPEED, &cspeed);
 	add(&diffusecolor, &cspeed, &diffusecolor);
 }
 
@@ -300,8 +300,8 @@ phong(coord_t *c)
 	}
 
 	mul_by_const(&Ispec, Kspec, &Ispec);
-	mul_by_const(&Iamb, Kdiff, &Iamb);
-	mul_by_const(&Idiff, Kamp, &Idiff);
+	mul_by_const(&Iamb, Kamp, &Iamb);
+	mul_by_const(&Idiff, Kdiff, &Idiff);
 
 	add(&Iamb, &Idiff, &result);
 	add(&result, &Ispec, &result);
@@ -341,9 +341,9 @@ init_circle(void)
 		}
 	}
 
-	light.x = 0.0;
-	light.y = 0.0;
-	light.z = 120.0;
+	light.x = -10.0;
+	light.y = -10.0;
+	light.z = 30.0;
 	clampon = true;
 	scenecolor.x = 0.0;
 	scenecolor.y = 0.0;
@@ -379,7 +379,7 @@ help(void)
 	printf("UP/DWON/LEFT/RIGHT/PgDn/PgUp - move light\n");
 	printf("a - ambient color\n");
 	printf("s - specular color\n");
-	printf("d - defus color\n");
+	printf("d - diffuse color\n");
 	printf("b - specular color\n");
 	printf("p - speed\n");
 	printf("- - sb color\n");
@@ -402,7 +402,7 @@ main(void)
 {
 
 	init_circle();
-	init_window(600, 480, "gk", false);
+	init_window(600, 480, "phong", false);
 	help();
 	while (1) {
 		SDL_Event ev;
@@ -443,11 +443,11 @@ main(void)
 		if (pkeys[SDLK_PAGEDOWN])
 			light.z -= 1.0 * SPEED;
 		if (pkeys[SDLK_i]) {
-			printf("light: (%g %g %g); move speed = %g"
-			    "seetings speed = %g\n",
+			printf("light: (%g %g %g); move speed = %g "
+			    "seetings speed = %g\n"
+			    "Kspec = %g, Kamp = %g, Kdiff = %g, alpha = %g",
 			    light.x, light.y, light.z, SPEED,
-			    SEETINGS_SPEED * SPEED);
-			printf("Kspec = %g, Kamp = %g, Kdiff = %g, alpha = %g",
+			    SETTINGS_SPEED * SPEED,
 			    Kspec, Kamp, Kdiff, alpha);
 			printf("Changing color: ");
 			if (vcolor == &rcolor)
