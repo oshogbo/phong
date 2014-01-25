@@ -435,6 +435,7 @@ help(void)
 	printf("- - sb color\n");
 	/* XXX: WTF plus dont work for me ??? */
 	printf("0 - add color\n");
+	printf("x - turn on clamp\n");
 	printf("c - turn off clamp\n");
 	printf("h - show this color\n");
 	printf("1 - set changing red color\n");
@@ -497,10 +498,10 @@ main(void)
 		if (pkeys[SDLK_i]) {
 			printf("light: (%g %g %g); move speed = %g "
 			    "seetings speed = %g\n"
-			    "scale = %i\n"
+			    "scale = %i, clamp = %i\n"
 			    "Kspec = %g, Kamp = %g, Kdiff = %g, alpha = %g\n",
 			    light.x, light.y, light.z, SPEED,
-			    SETTINGS_SPEED * SPEED, scale,
+			    SETTINGS_SPEED * SPEED, scale, clampon,
 			    Kspec, Kamp, Kdiff, alpha);
 			printf("Changing color: ");
 			if (vcolor == &rcolor)
@@ -566,7 +567,7 @@ main(void)
 			scale = false;
 		if (pkeys[SDLK_c])
 			clampon = false;
-		else
+		if (pkeys[SDLK_x])
 			clampon = true;
 		if (pkeys[SDLK_0] && addfunc != NULL)
 			addfunc(vcolor);
