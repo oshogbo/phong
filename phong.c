@@ -377,8 +377,6 @@ main(void)
 		if (pkeys[SDLK_PAGEDOWN])
 			light.z -= 1.0 * SPEED;
 		if (pkeys[SDLK_i]) {
-			if (infofunc != NULL)
-				infofunc();
 			printf("light: (%g %g %g); speed = %g\n",
 			    light.x, light.y, light.z, SPEED);
 			printf("Changing color: ");
@@ -391,6 +389,8 @@ main(void)
 			else if (vcolor == &acolor)
 				printf("all");
 			printf("\n");
+			if (infofunc != NULL)
+				infofunc();
 		}
 		if (pkeys[SDLK_a]) {
 			addfunc = add_ambientcolor;
