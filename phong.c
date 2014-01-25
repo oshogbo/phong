@@ -337,7 +337,8 @@ phong(coord_t *c)
 	normalize(&R, &R);
 
 	mul_by_const(&diffusecolor, fmax(dot(&N, neg(&L, &L)), 0.0), &Idiff);
-	mul_by_const(&specularcolor, pow(fmax(dot(&R, &E), 0.0), alpha), &Ispec);
+	mul_by_const(&specularcolor,
+	    pow(fmax(dot(&R, &E), 0.0), alpha), &Ispec);
 	if (clampon == true) {
 		clamp_v(&Idiff, 0.0, 1.0, &Idiff);
 		clamp_v(&Ispec, 0.0, 1.0, &Ispec);
@@ -351,12 +352,15 @@ phong(coord_t *c)
 	add(&result, &Ispec, &result);
 	add(&result, &scenecolor, &result);
 
-	if (scale)
-		s = (Kspec + Kamp + Kdiff + 1.0);
-	else
-		s = 1.0;
+	if (scale) {
+		s = (Kspec + Kamp + Kdiff);
+		glColor3f(result.x / (s + scenecolor.x),
+		    result.y / (s + scenecolor.y),
+		    result.z / (s + scenecolor.z));
+	} else {
+		glColor3f(result.x, result.y, result.z);
+	}
 
-	glColor3f(result.x / s, result.y / s, result.z / s);
 }
 
 static void
@@ -394,7 +398,7 @@ init_circle(void)
 	light.y = -10.0;
 	light.z = 30.0;
 	clampon = true;
-	scale 	= false;
+	scale	= true;
 	scenecolor.x = 0.0;
 	scenecolor.y = 0.0;
 	scenecolor.z = 0.0;
@@ -430,7 +434,7 @@ help(void)
 	printf("a - ambient color\n");
 	printf("s - specular color\n");
 	printf("d - diffuse color\n");
-	printf("b - specular color\n");
+	printf("b - background color\n");
 	printf("p - speed\n");
 	printf("- - sb color\n");
 	/* XXX: WTF plus dont work for me ??? */
