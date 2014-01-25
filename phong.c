@@ -118,6 +118,8 @@ sub_kspec(coord_t __attribute__ ((unused)) *c)
 {
 
 	Kspec -= SETTINGS_SPEED * SPEED;
+	if (Kspec < 0)
+		Kspec = 0;
 }
 
 static void
@@ -132,6 +134,8 @@ sub_kamp(coord_t __attribute__ ((unused)) *c)
 {
 
 	Kamp -= SETTINGS_SPEED * SPEED;
+	if (Kamp < 0)
+		Kamp = 0;
 }
 
 static void
@@ -146,6 +150,8 @@ sub_kdiff(coord_t __attribute__ ((unused)) *c)
 {
 
 	Kdiff -= SETTINGS_SPEED * SPEED;
+	if (Kdiff < 0)
+		Kdiff = 0;
 }
 
 static void
@@ -167,6 +173,8 @@ sub_alpha(coord_t __attribute__ ((unused)) *c)
 {
 
 	alpha -= SETTINGS_SPEED * SPEED;
+	if (alpha < 0)
+		alpha = 0;
 }
 
 static void
