@@ -36,12 +36,14 @@
 #define PIXEL_HEIGHT	PIXEL_WIDTH
 #define ANGLE_STEP	0.5
 #define RADIUS		100
+#define	SPEED		10
 /* 1 / ANGLE_STEP == 2 MUST BY INTEGER */
 #define CIRCLE_SIZE	(360 * 2 * 180 * 2)
-#define Ia		0.5
+#define Ia		0.0
 
 bool	pkeys[512];
 coord_t	coords[CIRCLE_SIZE];
+coord_t light;
 
 static void
 init_window(int width, int height, const char *name, bool fs)
@@ -86,11 +88,7 @@ static void
 phong(coord_t *c)
 {
 	float r, Idiff, Ispec;
-	coord_t light, L, E, R, N;
-
-	light.x = 0.0;
-	light.y = 0.0;
-	light.z = 120.0; 
+	coord_t L, E, R, N;
 
 	normalize(c, &N);
 
@@ -110,7 +108,6 @@ phong(coord_t *c)
 
 	r = Ia + Idiff + Ispec;
 
-	printf("%g\n", r);
 	glColor3f(r, 0.0, 0.0);
 }
 
@@ -138,10 +135,15 @@ init_circle(void)
 		for (a = 0; a < 360; a += ANGLE_STEP) {
 			coords[i].x = rsb * cosf(a * 180 / M_PI);
 			coords[i].y = rsb * sinf(a * 180 / M_PI);
-			coords[i].z = rcb; 
+			coords[i].z = rcb;
 			i++;
 		}
 	}
+
+	light.x = 0.0;
+	light.y = 0.0;
+	light.z = 120.0;
+
 	printf("%i %i\n", i, CIRCLE_SIZE);
 }
 
@@ -175,6 +177,20 @@ main(void)
 					exit(1);
 			}
 		}
+
+		if (pkeys[SDLK_UP])
+			light.y += 1.0 * SPEED;
+		if (pkeys[SDLK_DOWN])
+			light.y -= 1.0 * SPEED;
+		if (pkeys[SDLK_RIGHT])
+			light.x += 1.0 * SPEED;
+		if (pkeys[SDLK_LEFT])
+			light.x -= 1.0 * SPEED;
+		if (pkeys[SDLK_PAGEUP])
+			light.z += 1.0 * SPEED;
+		if (pkeys[SDLK_PAGEDOWN])
+			light.z -= 1.0 * SPEED;
+
 		SDL_GL_SwapBuffers();
 	}
 
