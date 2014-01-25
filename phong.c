@@ -119,7 +119,6 @@ sub_scenecolor(coord_t *c)
 
 	mul_by_const(c, -0.0001 * SPEED, &cspeed);
 	add(&scenecolor, &cspeed, &scenecolor);
-	glClearColor(scenecolor.x, scenecolor.y, scenecolor.z, 0.0);
 }
 
 static void
@@ -129,7 +128,6 @@ add_scenecolor(coord_t *c)
 
 	mul_by_const(c, 0.0001 * SPEED, &cspeed);
 	add(&scenecolor, &cspeed, &scenecolor);
-	glClearColor(scenecolor.x, scenecolor.y, scenecolor.z, 0.0);
 }
 
 static void
@@ -217,8 +215,10 @@ info_diffusecolor(void)
 static void
 phong(coord_t *c)
 {
-	coord_t Idiff, Ispec;
+	coord_t Idiff, Ispec, Iamb;
 	coord_t L, E, R, N, result;
+
+	memcpy(&Iamb, &ambientcolor, sizeof(coord_t));
 
 	normalize(c, &N);
 
@@ -236,13 +236,17 @@ phong(coord_t *c)
 	normalize(&R, &R);
 
 	mul_by_const(&diffusecolor, fmax(dot(&N, &L), 0.0), &Idiff);
-	mul_by_const(&specularcolor, pow(fmax(dot(&R, &E), 0.0), 0.3), &Ispec);
+	mul_by_const(&specularcolor, pow(fmax(dot(&R, &E), 0.0), 100), &Ispec);
 	if (clampon == true) {
 		clamp_v(&Idiff, 0.0, 1.0, &Idiff);
 		clamp_v(&Ispec, 0.0, 1.0, &Idiff);
 	}
 
-	add(&ambientcolor, &Idiff, &result);
+	mul_by_const(&Ispec, 1.0, &Ispec);
+	mul_by_const(&Iamb, 0.3, &Iamb);
+	mul_by_const(&Idiff, 1.0, &Idiff);
+
+	add(&Iamb, &Idiff, &result);
 	add(&result, &Ispec, &result);
 	add(&result, &scenecolor, &result);
 
@@ -288,17 +292,17 @@ init_circle(void)
 	scenecolor.y = 0.0;
 	scenecolor.z = 0.0;
 
-	diffusecolor.x = 0.2;
-	diffusecolor.y = 0.2;
-	diffusecolor.z = 0.2;
+	diffusecolor.x = 0.01;
+	diffusecolor.y = 0.01;
+	diffusecolor.z = 0.01;
 
-	specularcolor.x = 0.4;
-	specularcolor.y = 0.4;
-	specularcolor.z = 0.4;
+	specularcolor.x = 0.2;
+	specularcolor.y = 0.2;
+	specularcolor.z = 0.2;
 
-	ambientcolor.x = 0.0;
-	ambientcolor.y = 0.0;
-	ambientcolor.z = 0.0;
+	ambientcolor.x = 0.1;
+	ambientcolor.y = 0.5;
+	ambientcolor.z = 0.1;
 
 	rcolor.x = 1.0;
 	gcolor.y = 1.0;
@@ -342,6 +346,7 @@ main(void)
 	while (1) {
 		SDL_Event ev;
 
+		glClearColor(scenecolor.x, scenecolor.y, scenecolor.z, 0.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glLoadIdentity();
 
