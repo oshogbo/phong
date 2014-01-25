@@ -96,7 +96,7 @@ static void
 info(const char *name, coord_t *c)
 {
 
-	printf("%s %g %g %g\n", name, c->x, c->y, c->z);
+	printf("Changing: %s [%g %g %g]\n", name, c->x, c->y, c->z);
 }
 
 static void
@@ -111,6 +111,13 @@ add_speed(coord_t __attribute__ ((unused)) *c)
 {
 
 	SPEED *= 10;
+}
+
+static void
+info_speed(void)
+{
+
+	printf("Changing: speed.\n");
 }
 
 static void
@@ -130,6 +137,13 @@ add_kspec(coord_t __attribute__ ((unused)) *c)
 }
 
 static void
+info_kspec(void)
+{
+
+	printf("Changing: kspec.\n");
+}
+
+static void
 sub_kamp(coord_t __attribute__ ((unused)) *c)
 {
 
@@ -143,6 +157,13 @@ add_kamp(coord_t __attribute__ ((unused)) *c)
 {
 
 	Kamp += SETTINGS_SPEED * SPEED;
+}
+
+static void
+info_kamp(void)
+{
+
+	printf("Changing: kampi.\n");
 }
 
 static void
@@ -162,6 +183,13 @@ add_kdiff(coord_t __attribute__ ((unused)) *c)
 }
 
 static void
+info_kdiff(void)
+{
+
+	printf("Changing kamp.\n");
+}
+
+static void
 add_alpha(coord_t __attribute__ ((unused)) *c)
 {
 
@@ -175,6 +203,13 @@ sub_alpha(coord_t __attribute__ ((unused)) *c)
 	alpha -= SETTINGS_SPEED * SPEED;
 	if (alpha < 0)
 		alpha = 0;
+}
+
+static void
+info_alpha(void)
+{
+
+	printf("Changing alpha.\n");
 }
 
 static void
@@ -488,27 +523,27 @@ main(void)
 		if (pkeys[SDLK_p]) {
 			addfunc = add_speed;
 			subfunc = sub_speed;
-			infofunc = NULL;
+			infofunc = info_speed;
 		}
 		if (pkeys[SDLK_h]) {
 			addfunc = add_kspec;
 			subfunc = sub_kspec;
-			infofunc = NULL;
+			infofunc = info_kspec;
 		}
 		if (pkeys[SDLK_j]) {
 			addfunc = add_kamp;
 			subfunc = sub_kamp;
-			infofunc = NULL;
+			infofunc = info_kamp;
 		}
 		if (pkeys[SDLK_k]) {
 			addfunc = add_kdiff;
 			subfunc = sub_kdiff;
-			infofunc = NULL;
+			infofunc = info_kdiff;
 		}
 		if (pkeys[SDLK_l]) {
 			addfunc = add_alpha;
 			subfunc = sub_alpha;
-			infofunc = NULL;
+			infofunc = info_alpha;
 		}
 		if (pkeys[SDLK_d]) {
 			addfunc = add_diffiusecolor;
