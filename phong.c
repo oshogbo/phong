@@ -369,9 +369,9 @@ main(void)
 		if (pkeys[SDLK_DOWN])
 			light.y += 1.0 * SPEED;
 		if (pkeys[SDLK_RIGHT])
-			light.x += 1.0 * SPEED;
-		if (pkeys[SDLK_LEFT])
 			light.x -= 1.0 * SPEED;
+		if (pkeys[SDLK_LEFT])
+			light.x += 1.0 * SPEED;
 		if (pkeys[SDLK_PAGEUP])
 			light.z += 1.0 * SPEED;
 		if (pkeys[SDLK_PAGEDOWN])
