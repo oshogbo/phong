@@ -51,7 +51,7 @@ void	(*addfunc)(coord_t*);
 void	(*subfunc)(coord_t*);
 void	(*infofunc)(void);
 float	SPEED = 10;
-float	Kspec = 6.0, Kamp = 0.25, Kdiff = 0.25, alpha = 200.0;
+float	Kspec = 1.0, Kamp = 0.25, Kdiff = 1.0, alpha = 200.0;
 
 static void
 init_window(int width, int height, const char *name, bool fs)
