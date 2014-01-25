@@ -36,6 +36,7 @@
 #define PIXEL_HEIGHT	PIXEL_WIDTH
 #define ANGLE_STEP	0.5
 #define RADIUS		100
+#define SEETINGS_SPEED 	0.0001
 /* 1 / ANGLE_STEP == 2 MUST BY INTEGER */
 #define CIRCLE_SIZE	(360 * 2 * 180 * 2)
 #define Ia		0.0
@@ -50,6 +51,7 @@ void	(*addfunc)(coord_t*);
 void	(*subfunc)(coord_t*);
 void	(*infofunc)(void);
 float	SPEED = 10;
+float	Kspec = 1.0, Kamp = 1.0, Kdiff = 1.0, alpha = 100.0;
 
 static void
 init_window(int width, int height, const char *name, bool fs)
@@ -111,6 +113,61 @@ add_speed(coord_t __attribute__ ((unused)) *c)
 	SPEED *= 10;
 }
 
+static void
+sub_kspec(coord_t __attribute__ ((unused)) *c)
+{
+
+	Kspec -= 0.0001 * SPEED;
+}
+
+static void
+add_kspec(coord_t __attribute__ ((unused)) *c)
+{
+
+	Kspec += 0.0001 * SPEED;
+}
+
+static void
+sub_kamp(coord_t __attribute__ ((unused)) *c)
+{
+
+	Kamp -= 0.0001 * SPEED;
+}
+
+static void
+add_kamp(coord_t __attribute__ ((unused)) *c)
+{
+
+	Kamp += 0.0001 * SPEED;
+}
+
+static void
+sub_kdiff(coord_t __attribute__ ((unused)) *c)
+{
+
+	Kdiff -= 0.0001 * SPEED;
+}
+
+static void
+add_kdiff(coord_t __attribute__ ((unused)) *c)
+{
+
+	Kdiff += 0.0001 * SPEED;
+}
+
+static void
+add_alpha(coord_t __attribute__ ((unused)) *c)
+{
+
+	alpha += 0.0001 * SPEED;
+}
+
+static void
+sub_alpha(coord_t __attribute__ ((unused)) *c)
+{
+
+	alpha -= 0.0001 * SPEED;
+}
 
 static void
 sub_scenecolor(coord_t *c)
@@ -236,15 +293,15 @@ phong(coord_t *c)
 	normalize(&R, &R);
 
 	mul_by_const(&diffusecolor, fmax(dot(&N, &L), 0.0), &Idiff);
-	mul_by_const(&specularcolor, pow(fmax(dot(&R, &E), 0.0), 100), &Ispec);
+	mul_by_const(&specularcolor, pow(fmax(dot(&R, &E), 0.0), alpha), &Ispec);
 	if (clampon == true) {
 		clamp_v(&Idiff, 0.0, 1.0, &Idiff);
 		clamp_v(&Ispec, 0.0, 1.0, &Idiff);
 	}
 
-	mul_by_const(&Ispec, 1.0, &Ispec);
-	mul_by_const(&Iamb, 0.3, &Iamb);
-	mul_by_const(&Idiff, 1.0, &Idiff);
+	mul_by_const(&Ispec, Kspec, &Ispec);
+	mul_by_const(&Iamb, Kdiff, &Iamb);
+	mul_by_const(&Idiff, Kamp, &Idiff);
 
 	add(&Iamb, &Idiff, &result);
 	add(&result, &Ispec, &result);
@@ -334,6 +391,10 @@ help(void)
 	printf("2 - set changing green color\n");
 	printf("3 - set changing blue color\n");
 	printf("4 - set changing all color\n");
+	printf("h - Kspec\n");
+	printf("j - Kamp\n");
+	printf("k - Kdiff\n");
+	printf("l - alpha\n");
 }
 
 int
@@ -382,8 +443,12 @@ main(void)
 		if (pkeys[SDLK_PAGEDOWN])
 			light.z -= 1.0 * SPEED;
 		if (pkeys[SDLK_i]) {
-			printf("light: (%g %g %g); speed = %g\n",
-			    light.x, light.y, light.z, SPEED);
+			printf("light: (%g %g %g); move speed = %g"
+			    "seetings speed = %g\n",
+			    light.x, light.y, light.z, SPEED,
+			    SEETINGS_SPEED * SPEED);
+			printf("Kspec = %g, Kamp = %g, Kdiff = %g, alpha = %g",
+			    Kspec, Kamp, Kdiff, alpha);
 			printf("Changing color: ");
 			if (vcolor == &rcolor)
 				printf("red");
@@ -415,6 +480,26 @@ main(void)
 		if (pkeys[SDLK_p]) {
 			addfunc = add_speed;
 			subfunc = sub_speed;
+			infofunc = NULL;
+		}
+		if (pkeys[SDLK_h]) {
+			addfunc = add_kspec;
+			subfunc = sub_kspec;
+			infofunc = NULL;
+		}
+		if (pkeys[SDLK_j]) {
+			addfunc = add_kamp;
+			subfunc = sub_kamp;
+			infofunc = NULL;
+		}
+		if (pkeys[SDLK_k]) {
+			addfunc = add_kdiff;
+			subfunc = sub_kdiff;
+			infofunc = NULL;
+		}
+		if (pkeys[SDLK_l]) {
+			addfunc = add_alpha;
+			subfunc = sub_alpha;
 			infofunc = NULL;
 		}
 		if (pkeys[SDLK_d]) {
