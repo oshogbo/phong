@@ -179,9 +179,9 @@ main(void)
 		}
 
 		if (pkeys[SDLK_UP])
-			light.y += 1.0 * SPEED;
-		if (pkeys[SDLK_DOWN])
 			light.y -= 1.0 * SPEED;
+		if (pkeys[SDLK_DOWN])
+			light.y += 1.0 * SPEED;
 		if (pkeys[SDLK_RIGHT])
 			light.x += 1.0 * SPEED;
 		if (pkeys[SDLK_LEFT])
@@ -190,6 +190,8 @@ main(void)
 			light.z += 1.0 * SPEED;
 		if (pkeys[SDLK_PAGEDOWN])
 			light.z -= 1.0 * SPEED;
+		if (pkeys[SDLK_a])
+			printf("%g %g %g\n", light.x, light.y, light.z);
 
 		SDL_GL_SwapBuffers();
 	}
