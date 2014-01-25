@@ -3,7 +3,7 @@ CFLAGS=-Wall -Wextra
 TARGET=a.out
 LIBS=-lm -lGL -lSDL
 
-SRC=phong.c
+SRC=phong.c coord.c
 
 OBJ=$(SRC:.c=.o)
 

@@ -35,7 +35,7 @@
 #define PIXEL_WIDTH	2.0
 #define PIXEL_HEIGHT	PIXEL_WIDTH
 #define ANGLE_STEP	0.5
-#define R		100
+#define RADIUS		100
 /* 1 / ANGLE_STEP == 2 MUST BY INTEGER */
 #define CIRCLE_SIZE	(360 * 2 * 180 * 2)
 #define Ia		0.5
@@ -83,11 +83,44 @@ draw_pixel(float x, float y)
 }
 
 static void
+phong(coord_t *c)
+{
+	float r, Idiff, Ispec;
+	coord_t light, L, E, R, N;
+
+	light.x = 0.0;
+	light.y = 0.0;
+	light.z = 120.0; 
+
+	normalize(c, &N);
+
+	sub(&light, c, &L);
+	normalize(&L, &L);
+
+	neg(c, &E);
+	normalize(&E, &E);
+
+	reflect(&L, &N, &R);
+	neg(&R, &R);
+	normalize(&R, &R);
+
+	Idiff = clamp(fmax(dot(&N, &L), 0.0), 0.0, 1.0);
+
+	Ispec = clamp(pow(fmax(dot(&R, &E), 0.0), 0.3), 0.0, 1.0);
+
+	r = Ia + Idiff + Ispec;
+
+	printf("%g\n", r);
+	glColor3f(r, 0.0, 0.0);
+}
+
+static void
 draw_scene(void)
 {
 	unsigned int i;
 
 	for (i = 0; i < CIRCLE_SIZE; i++) {
+		phong(&coords[i]);
 		draw_pixel(coords[i].x, coords[i].y);
 	}
 }
@@ -95,14 +128,13 @@ draw_scene(void)
 static void
 init_circle(void)
 {
-	float r, a, b, rsb, rcb;
+	float a, b, rsb, rcb;
 	unsigned int i;
 
 	i = 0;
-	r = R;
 	for (b = 0; b < 180; b += ANGLE_STEP) {
-		rsb = r * sinf(b * 180 / M_PI);
-		rcb = r * cosf(b * 180 / M_PI);
+		rsb = RADIUS * sinf(b * 180 / M_PI);
+		rcb = RADIUS * cosf(b * 180 / M_PI);
 		for (a = 0; a < 360; a += ANGLE_STEP) {
 			coords[i].x = rsb * cosf(a * 180 / M_PI);
 			coords[i].y = rsb * sinf(a * 180 / M_PI);
