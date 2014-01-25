@@ -104,7 +104,7 @@ phong(coord_t *c)
 
 	Idiff = clamp(fmax(dot(&N, &L), 0.0), 0.0, 1.0);
 
-	Ispec = clamp(pow(fmax(dot(&R, &E), 0.0), 0.3), 0.0, 1.0);
+	Ispec = clamp(pow(fmax(dot(&R, &E), 0.0), 0.3 * 0.5), 0.0, 1.0);
 
 	r = Ia + Idiff + Ispec;
 
@@ -117,6 +117,8 @@ draw_scene(void)
 	unsigned int i;
 
 	for (i = 0; i < CIRCLE_SIZE; i++) {
+		if (coords[i].z > 0.0)
+			continue;
 		phong(&coords[i]);
 		draw_pixel(coords[i].x, coords[i].y);
 	}
