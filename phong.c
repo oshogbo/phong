@@ -499,6 +499,8 @@ main(void)
 			light.z += 1.0 * SPEED;
 		if (pkeys[SDLK_PAGEDOWN])
 			light.z -= 1.0 * SPEED;
+		if (light.z < 0)
+			light.z = 0;
 		if (pkeys[SDLK_i]) {
 			printf("light: (%g %g %g); move speed = %g "
 			    "seetings speed = %g\n"
