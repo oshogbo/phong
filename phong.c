@@ -37,7 +37,6 @@
 #define ANGLE_STEP	0.5
 #define RADIUS		100
 #define SETTINGS_SPEED	0.01
-/* 1 / ANGLE_STEP == 2 */
 #define CIRCLE_SIZE	(360 * 2 * 180 * 2)
 #define Ia		0.0
 
