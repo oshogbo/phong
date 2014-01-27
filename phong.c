@@ -32,7 +32,7 @@
 
 #include "coord.h"
 
-#define PIXEL_WIDTH	2.0
+#define PIXEL_WIDTH	1.0
 #define PIXEL_HEIGHT	PIXEL_WIDTH
 #define ANGLE_STEP	0.5
 #define RADIUS		100
@@ -396,8 +396,8 @@ init_circle(void)
 	light.x = -10.0;
 	light.y = -10.0;
 	light.z = 30.0;
-	clampon = true;
-	scale	= true;
+	clampon = false;
+	scale	= false;
 	scenecolor.x = 0.0;
 	scenecolor.y = 0.0;
 	scenecolor.z = 0.0;
