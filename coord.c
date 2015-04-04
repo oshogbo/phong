@@ -174,7 +174,7 @@ reflect(const coord_t *v, const coord_t *n, coord_t *out)
 
 	d = dot(v, n) * 2.0f;
 	mul_by_const(n, d, out);
-	sub(v, out, out);
+	sub(out, v, out);
 
 	return (out);
 }

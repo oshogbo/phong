@@ -32,7 +32,7 @@
 
 #include "coord.h"
 
-#define PIXEL_WIDTH	1.0
+#define PIXEL_WIDTH	2.0
 #define PIXEL_HEIGHT	PIXEL_WIDTH
 #define ANGLE_STEP	0.5
 #define RADIUS		100
@@ -50,7 +50,7 @@ void	(*addfunc)(coord_t*);
 void	(*subfunc)(coord_t*);
 void	(*infofunc)(void);
 float	SPEED = 10;
-float	Kspec = 0.3, Kamp = 0.25, Kdiff = 0.3, alpha = 200.0;
+float	Kspec = 0.85, Kamp = 0.0, Kdiff = 0.15, alpha = 80.0;
 
 static void
 init_window(int width, int height, const char *name, bool fs)
@@ -317,6 +317,7 @@ phong(coord_t *c)
 	coord_t Idiff, Ispec, Iamb;
 	coord_t L, E, R, N, result;
 	float s;
+	float dotNL;
 
 	memcpy(&Iamb, &ambientcolor, sizeof(coord_t));
 
@@ -332,10 +333,11 @@ phong(coord_t *c)
 
 	/* Count R vector */
 	reflect(&L, &N, &R);
-	neg(&R, &R);
-	normalize(&R, &R);
+//	neg(&R, &R);
+//	normalize(&R, &R);
 
-	mul_by_const(&diffusecolor, fmax(dot(&N, neg(&L, &L)), 0.0), &Idiff);
+	dotNL = dot(&N, neg(&L, &L));
+	mul_by_const(&diffusecolor, fmax(dotNL, 0.0), &Idiff);
 	mul_by_const(&specularcolor,
 	    pow(fmax(dot(&R, &E), 0.0), alpha), &Ispec);
 	if (clampon == true) {
@@ -348,7 +350,8 @@ phong(coord_t *c)
 	mul_by_const(&Idiff, Kdiff, &Idiff);
 
 	add(&Iamb, &Idiff, &result);
-	add(&result, &Ispec, &result);
+	if (dotNL > 0)
+		add(&result, &Ispec, &result);
 	add(&result, &scenecolor, &result);
 
 	if (scale) {
@@ -395,24 +398,24 @@ init_circle(void)
 
 	light.x = -10.0;
 	light.y = -10.0;
-	light.z = 30.0;
+	light.z = 400.0;
 	clampon = false;
 	scale	= false;
 	scenecolor.x = 0.0;
 	scenecolor.y = 0.0;
 	scenecolor.z = 0.0;
 
-	diffusecolor.x = 0.1;
-	diffusecolor.y = 0.1;
-	diffusecolor.z = 0.1;
+	diffusecolor.x = 1.0;
+	diffusecolor.y = 0.35;
+	diffusecolor.z = 0.0;
 
-	specularcolor.x = 0.2;
-	specularcolor.y = 0.2;
-	specularcolor.z = 0.2;
+	specularcolor.x = 0.6;
+	specularcolor.y = 0.6;
+	specularcolor.z = 0.6;
 
-	ambientcolor.x = 0.1;
-	ambientcolor.y = 0.5;
-	ambientcolor.z = 0.1;
+	ambientcolor.x = 1.;
+	ambientcolor.y = 0.35;
+	ambientcolor.z = 0.0;
 
 	rcolor.x = 1.0;
 	gcolor.y = 1.0;
@@ -498,8 +501,6 @@ main(void)
 			light.z += 1.0 * SPEED;
 		if (pkeys[SDLK_PAGEDOWN])
 			light.z -= 1.0 * SPEED;
-		if (light.z < 0)
-			light.z = 0;
 		if (pkeys[SDLK_i]) {
 			printf("light: (%g %g %g); move speed = %g "
 			    "seetings speed = %g\n"
