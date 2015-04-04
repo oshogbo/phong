@@ -42,5 +42,7 @@ Phong shading.
     l - alpha
 
 # Authors
-Michał Knieć <michalkniec91 (at) gmail (dot) com>
-Mariusz Zaborski <oshogbo (at) vexillium (dot) org>
+
+Michał Knieć
+
+Mariusz Zaborski
