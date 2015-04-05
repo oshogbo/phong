@@ -1,6 +1,9 @@
 # phong
 Phong shading.
 
+# Required
+OpenGL and SDL library.
+
 # Building
 
     $ make
